@@ -8,9 +8,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',[HomeController::class,'home'] );
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard',[HomeController::class,'home_login'])
+->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,4 +44,6 @@ Route::post('update_product/{id}',[AdminController::class, 'update_product'])->
 Middleware(['auth','admin']);
 Route::get('product_search',[AdminController::class, 'product_search'])->
 Middleware(['auth','admin']);
-
+Route::get('product_details/{id}',[HomeController::class, 'product_details']);
+Route::get('add_cart/{id}',[HomeController::class, 'add_cart'])->
+middleware(['auth', 'verified']);
