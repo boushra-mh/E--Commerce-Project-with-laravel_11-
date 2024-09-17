@@ -67,10 +67,10 @@
                         </div>
                         <div class="input_deg">
                             <label>Category</label>
-                            <select> 
+                            <select name="name"> 
                                 <option>Select category</option>
                                 @foreach ($category as $category)
-                                    <option value="{$category->name">{{$category->category_name}}</option>
+                                    <option value="{{$category->category_name}}">{{$category->category_name}}</option>
                                 @endforeach
                             </select>
                         </div>

@@ -61,14 +61,21 @@ class AdminController extends Controller
       $product->price=$request->price;
       $product->quantity=$request->quantity;
       $product->description=$request->description;
-      $product->category =$request->name;
+      $product->category=$request->name;
       $image=$request->image;
-      if($image)
-      {
-        $imageName=time() .'.'. $image->getClientOriginalExtension();
-        $request->image->move('products' . $imageName);
-        $product->image=$imageName;
-      }
+      // if($image)
+      // {
+      //   $imageName=time() .'.'. $image->getClientOriginalExtension();
+      //   $request->image->move('public/products' . $imageName);
+      //   $product->image=$imageName;
+      // }
+
+      if ($image = $request->file('image')) {
+        $destinationPath = 'images/';
+        $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+        $image->move($destinationPath, $profileImage);
+        $product->image = "$profileImage";
+    }
       $product->save();
       toastr()->timeOut(5000)->closeButton()->addSuccess('Product Added Successfully');
       return redirect()->back();
@@ -76,7 +83,7 @@ class AdminController extends Controller
     }
     public function view_product()
     {
-      $product=Product::paginate(3);
+      $product=Product::paginate(63);
       
       return view('admin.view_product',compact('product'));
     }
@@ -87,6 +94,40 @@ class AdminController extends Controller
       toastr()->timeOut(5000)->closeButton()->addSuccess('Product Deleted   Successfully');
       return redirect()->back();
 
+    }
+    public function edit_product($id)
+    {
+      $data  =Product::find($id);
+      return view('admin.edit_product', compact('data'));
+
+    }
+    public function update_product(Request $request,$id)
+    {
+     
+      $data=Product::find($id);
+      $data->product_name=$request->product_name;
+      $data->description=$request->description;
+      $data->price=$request->price;
+      $data->quantity=$request->quantity;
+      $data->category=$request->category;
+    
+      if ($image = $request->file('image')) {
+          $destinationPath = 'images/';
+          $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+          $image->move($destinationPath, $profileImage);
+          $data->image = "$profileImage";
+      }
+      $data->save();
+      toastr()->timeOut(5000)->closeButton()->addSuccess('Product updated   Successfully');
+      return redirect('/view_product');
+
+    }
+    public function product_search(Request $request)
+    {
+      $search = $request->search;
+      $product=Product::where('product_name','LIKE','%'.$search.'%')
+      ->orWhere('category','LIKE','%'.$search.'%')->paginate(63);
+      return view('admin/view_product',compact('product'));
     }
 }
 

@@ -39,4 +39,10 @@ Route::get('view_product',[AdminController::class, 'view_product'])->
 Middleware(['auth','admin']);
 Route::get('delete_product/{id}',[AdminController::class, 'delete_product'])->
 Middleware(['auth','admin']);
+Route::get('edit_product/{id}',[AdminController::class, 'edit_product'])->
+Middleware(['auth','admin']);
+Route::post('update_product/{id}',[AdminController::class, 'update_product'])->
+Middleware(['auth','admin']);
+Route::get('product_search',[AdminController::class, 'product_search'])->
+Middleware(['auth','admin']);
 
