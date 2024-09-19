@@ -37,8 +37,9 @@
         <div class="user_option">
           @if (Route::has('login'))
           @auth
-          <a href="">
-            <i class="fa fa-shopping-bag" aria-hidden="true">{{$count}}</i>
+          <a href="{{url('myCart')}}">
+            <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+            {{$count}}
           </a>
           <form method="POST" action="{{ route('logout') }}">
             @csrf

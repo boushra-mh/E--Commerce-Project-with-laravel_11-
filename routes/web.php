@@ -47,3 +47,15 @@ Middleware(['auth','admin']);
 Route::get('product_details/{id}',[HomeController::class, 'product_details']);
 Route::get('add_cart/{id}',[HomeController::class, 'add_cart'])->
 middleware(['auth', 'verified']);
+Route::get('myCart',[HomeController::class, 'myCart'])->
+middleware(['auth', 'verified']);
+Route::post('confirm_order',[HomeController::class, 'confirm_order'])->
+middleware(['auth', 'verified']);
+Route::get('view_orders',[AdminController::class, 'view_orders'])->
+Middleware(['auth','admin']);
+Route::get('on_the_way/{id}',[AdminController::class, 'on_the_way'])->
+Middleware(['auth','admin']);
+Route::get('delivered/{id}',[AdminController::class, 'delivered'])->
+Middleware(['auth','admin']);
+Route::get('print_pdf/{id}',[AdminController::class, 'print_pdf'])->
+Middleware(['auth','admin']);

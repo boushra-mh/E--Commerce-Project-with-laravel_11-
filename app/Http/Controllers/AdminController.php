@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -129,5 +131,38 @@ class AdminController extends Controller
       ->orWhere('category','LIKE','%'.$search.'%')->paginate(63);
       return view('admin/view_product',compact('product'));
     }
+    public function view_orders()
+    {
+      $data=Order::all();
+      return view('admin.order',compact('data'));
+    }
+public function on_the_way($id)
+{
+
+$data =Order::find($id);
+$data->status='on the way';
+$data->save();
+return redirect('/view_orders');
+
+}
+
+public function delivered($id)
+{
+
+$data =Order::find($id);
+$data->status='delivered';
+$data->save();
+return redirect('/view_orders');
+
+}
+
+public function print_pdf($id)
+
+{
+
+    $data=Order::find($id);    
+    $pdf = Pdf::loadView('admin.invoice',compact('data'));
+    return $pdf->download('invoice.pdf');
+}
 }
 
