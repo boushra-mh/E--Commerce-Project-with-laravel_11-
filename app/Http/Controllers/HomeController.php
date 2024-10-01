@@ -4,10 +4,21 @@ namespace App\Http\Controllers;
 
 use Http;
 use Illuminate\Http\Request;
+
 use App\Models\Product;
+
 use App\Models\User;
+
 use App\Models\Cart;
+
 use App\Models\Order;
+
+use Session;
+
+use Stripe;
+
+
+
 use Illuminate\Support\Facades\Auth;
 class HomeController extends Controller
 {
@@ -156,6 +167,56 @@ class HomeController extends Controller
         return redirect()->back() ;
 
 
+     }
+
+     public function my_orders()
+
+     {
+        $user = Auth::User()->id;
+
+        $count = Cart::where('user_id', $user)->get()->count();
+
+        $order =Order::where('user_id', $user)->get();
+
+        return view('home.orders',compact('count','order'));
+     }
+
+     public function stripe($value)
+
+     {
+ 
+         return view('home.stripe',compact('value'));
+ 
+     }
+
+     public function stripePost(Request $request,$value)
+
+     {
+ 
+         Stripe\Stripe::setApiKey(env('STRIPE_SECRET'));
+ 
+     
+ 
+         Stripe\Charge::create ([
+ 
+                 "amount" => $value * 100,
+ 
+                 "currency" => "usd",
+ 
+                 "source" => $request->stripeToken,
+ 
+                 "description" => "Test payment complete" 
+ 
+         ]);
+ 
+       
+ 
+         Session::flash('success', 'Payment successful!');
+ 
+               
+ 
+         return back();
+ 
      }
 
 }

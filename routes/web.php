@@ -11,6 +11,11 @@ Route::get('/',[HomeController::class,'home'] );
 Route::get('/dashboard',[HomeController::class,'home_login'])
 ->middleware(['auth', 'verified'])->name('dashboard');
 
+
+Route::get('/my_orders',[HomeController::class,'my_orders'])
+->middleware(['auth', 'verified'])->name('my_orders');
+
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -51,6 +56,15 @@ Route::get('myCart',[HomeController::class, 'myCart'])->
 middleware(['auth', 'verified']);
 Route::post('confirm_order',[HomeController::class, 'confirm_order'])->
 middleware(['auth', 'verified']);
+
+
+
+Route::get('stripe/{value}', [HomeController::class, 'stripe']);
+Route::post('stripe/{value}', [HomeController::class, 'stripePost'])->name('stripe.post');
+
+
+
+
 Route::get('view_orders',[AdminController::class, 'view_orders'])->
 Middleware(['auth','admin']);
 Route::get('on_the_way/{id}',[AdminController::class, 'on_the_way'])->
